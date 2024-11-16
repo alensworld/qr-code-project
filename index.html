@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Kod Oluşturucu</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <!-- Google Fonts'tan Saira Stencil One fontunu ekleyin -->
     <link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -16,7 +17,7 @@
     <button onclick="downloadQRCode()">QR Kodunu İndir</button>
 
     <h2>QR Kodu (Ön İzleme):</h2>
-    <canvas id="preview-canvas" width="300" height="300" style="border: 1px solid #000;"></canvas>
+    <canvas id="preview-canvas" width="500" height="500" style="border: 1px solid #000;"></canvas>
 
     <script>
         let qrPreview; // Ön izleme için QR kodu
@@ -36,7 +37,7 @@
             qrPreview = new QRious({
                 element: document.getElementById('preview-canvas'),
                 value: currentUrl,
-                size: 300, // Ön izleme boyutu
+                size: 500, // Ön izleme boyutu
                 background: 'black', // Zemin rengi siyah
                 foreground: 'white',  // Çizgi rengi beyaz
             });
@@ -68,7 +69,7 @@
                 ctx.font = 'bold 384px "Saira Stencil One"'; // Font boyutu
                 ctx.fillStyle = 'white'; // Yazı rengi beyaz
                 ctx.textAlign = 'center'; // Yazıyı ortaladık
-                const textYPosition = 400; // Yazıyı QR kodunun üstüne yerleştir
+                const textYPosition = 500; // Yazıyı QR koduna çok yakın yerleştir
                 ctx.fillText(fixedText, qrDownloadCanvas.width / 2, textYPosition); // Yazıyı yerleştir
             };
         }
@@ -79,19 +80,14 @@
                 return;
             }
 
-            // Canvas’tan blob verisi alalım
-            qrDownloadCanvas.toBlob((blob) => {
-                // Blob verisini kullanarak dosya indirme işlemi yapalım
-                const link = document.createElement('a');
-                const fileName = generateFileName(currentUrl);
-                const objectURL = URL.createObjectURL(blob);
-                link.href = objectURL;
-                link.download = fileName + '.png'; // Dinamik dosya adı
-                link.click();
+            // URL'yi geçerli bir dosya ismine dönüştür
+            const fileName = generateFileName(currentUrl);
 
-                // Bağlantı kullanıldıktan sonra object URL'yi serbest bırak
-                URL.revokeObjectURL(objectURL);
-            }, 'image/png');
+            // İndirme işlemi
+            const link = document.createElement('a');
+            link.download = fileName + '.png'; // Dinamik dosya adı
+            link.href = qrDownloadCanvas.toDataURL('image/png'); // PNG formatında veri
+            link.click();
         }
 
         function generateFileName(url) {
