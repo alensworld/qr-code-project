@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -48,14 +48,6 @@
                 foreground: 'white',  // Çizgi rengi beyaz
             });
 
-            // Ön izleme canvas'ına sabit yazıyı ekle
-            const previewCtx = document.getElementById('preview-canvas').getContext('2d');
-            previewCtx.font = 'bold 20px "Saira Stencil One"'; // Font boyutu
-            previewCtx.fillStyle = 'white'; // Yazı rengi beyaz
-            previewCtx.textAlign = 'center'; // Yazıyı ortaladık
-            const previewTextYPosition = 220; // Yazıyı QR kodunun altında
-            previewCtx.fillText(fixedText, 125, previewTextYPosition); // Yazıyı yerleştir
-
             // 2. QR Kodunu ve Sabit Yazıyı Yüksek Çözünürlüklü olarak oluştur
             qrDownloadCanvas = document.createElement('canvas'); // Yeni bir canvas oluştur
             qrDownloadCanvas.width = 1500; // İndirme boyutu genişlik (1500x1800)
@@ -83,7 +75,7 @@
                 ctx.font = 'bold 70px "Saira Stencil One"'; // Font boyutu
                 ctx.fillStyle = 'white'; // Yazı rengi beyaz
                 ctx.textAlign = 'center'; // Yazıyı ortaladık
-                const textYPosition = 1200; // Yazıyı daha aşağıda yerleştir
+                const textYPosition = 100; // Sabit yazıyı üst kısma yerleştir
                 ctx.fillText(fixedText, qrDownloadCanvas.width / 2, textYPosition); // Yazıyı yerleştir
 
                 // Yükleme göstergesini gizle
