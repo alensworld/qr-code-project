@@ -17,7 +17,10 @@
     <button onclick="downloadQRCode()">QR Kodunu İndir</button>
 
     <h2>QR Kodu (Ön İzleme):</h2>
-    <canvas id="preview-canvas" width="500" height="500" style="border: 1px solid #000;"></canvas>
+    <canvas id="preview-canvas" width="250" height="250" style="border: 1px solid #000;"></canvas>
+
+    <!-- Yükleme göstergesi -->
+    <div id="loading" style="display:none;">QR Kodu Yükleniyor...</div>
 
     <script>
         let qrPreview; // Ön izleme için QR kodu
@@ -33,26 +36,29 @@
                 return;
             }
 
+            // Yükleme göstergesini başlat
+            document.getElementById('loading').style.display = 'block';
+
             // 1. Ön İzleme için QR Kodunu Oluştur
             qrPreview = new QRious({
                 element: document.getElementById('preview-canvas'),
                 value: currentUrl,
-                size: 500, // Ön izleme boyutu
+                size: 250, // Ön izleme boyutu
                 background: 'black', // Zemin rengi siyah
                 foreground: 'white',  // Çizgi rengi beyaz
             });
 
             // 2. QR Kodunu ve Sabit Yazıyı Yüksek Çözünürlüklü olarak oluştur
             qrDownloadCanvas = document.createElement('canvas'); // Yeni bir canvas oluştur
-            qrDownloadCanvas.width = 5906; // Genişlik (50 cm)
-            qrDownloadCanvas.height = 7087; // Yükseklik (60 cm)
+            qrDownloadCanvas.width = 1500; // İndirme boyutu genişlik (1500x1500)
+            qrDownloadCanvas.height = 1500; // Yükseklik
 
             const ctx = qrDownloadCanvas.getContext('2d');
 
             // QR kodunu kare olarak oluştur
             const qrHighRes = new QRious({
                 value: currentUrl,
-                size: 5906, // Kare boyut
+                size: 1500, // Kare boyut, indirme için 1500x1500 px
                 background: 'black', // Zemin rengi siyah
                 foreground: 'white',  // Çizgi rengi beyaz
             });
@@ -61,16 +67,19 @@
             const qrImage = new Image();
             qrImage.src = qrHighRes.toDataURL();
             qrImage.onload = () => {
-                const xOffset = (qrDownloadCanvas.width - 5906) / 2;
-                const yOffset = (qrDownloadCanvas.height - 5906) / 2;
-                ctx.drawImage(qrImage, xOffset, yOffset, 5906, 5906);
+                const xOffset = (qrDownloadCanvas.width - 1500) / 2;
+                const yOffset = (qrDownloadCanvas.height - 1500) / 2;
+                ctx.drawImage(qrImage, xOffset, yOffset, 1500, 1500);
 
                 // QR Kodun Üstüne Sabit Yazıyı Ekle
-                ctx.font = 'bold 384px "Saira Stencil One"'; // Font boyutu
+                ctx.font = 'bold 100px "Saira Stencil One"'; // Font boyutu
                 ctx.fillStyle = 'white'; // Yazı rengi beyaz
                 ctx.textAlign = 'center'; // Yazıyı ortaladık
-                const textYPosition = 500; // Yazıyı QR koduna çok yakın yerleştir
+                const textYPosition = 1300; // Yazıyı QR koduna çok yakın yerleştir
                 ctx.fillText(fixedText, qrDownloadCanvas.width / 2, textYPosition); // Yazıyı yerleştir
+
+                // Yükleme göstergesini gizle
+                document.getElementById('loading').style.display = 'none';
             };
         }
 
@@ -83,11 +92,13 @@
             // URL'yi geçerli bir dosya ismine dönüştür
             const fileName = generateFileName(currentUrl);
 
-            // İndirme işlemi
-            const link = document.createElement('a');
-            link.download = fileName + '.png'; // Dinamik dosya adı
-            link.href = qrDownloadCanvas.toDataURL('image/png'); // PNG formatında veri
-            link.click();
+            // QR kodunu PNG olarak blob'a dönüştür
+            qrDownloadCanvas.toBlob(function(blob) {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob); // Blob URL'sini oluştur
+                link.download = fileName + '.png'; // Dosya ismini belirle
+                link.click();
+            }, 'image/png');
         }
 
         function generateFileName(url) {
