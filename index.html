@@ -26,7 +26,7 @@
         let qrPreview; // Ön izleme için QR kodu
         let qrDownloadCanvas; // İndirme için QR kodu
         let currentUrl; // Kullanıcı tarafından girilen URL
-        const fixedText = "www.istekuzerine.com"; // Sabit yazı
+        const fixedText = "ŞARKI İSTEMEK İÇİN QR KODU TARATIN"; // Sabit yazı
 
         function generateQRCode() {
             currentUrl = document.getElementById('url').value.trim();
@@ -72,7 +72,7 @@
                 ctx.drawImage(qrImage, xOffset, yOffset, 1500, 1500);
 
                 // QR Kodun Üstüne Sabit Yazıyı Ekle
-                ctx.font = 'bold 384px "Saira Stencil One"'; // Font boyutu
+                ctx.font = 'bold 192px "Saira Stencil One"'; // Font boyutu
                 ctx.fillStyle = 'white'; // Yazı rengi beyaz
                 ctx.textAlign = 'center'; // Yazıyı ortaladık
                 const textYPosition = 250; // Yazıyı QR koduna daha yakın yerleştir
