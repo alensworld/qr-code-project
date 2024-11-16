@@ -50,15 +50,15 @@
 
             // 2. QR Kodunu ve Sabit Yazıyı Yüksek Çözünürlüklü olarak oluştur
             qrDownloadCanvas = document.createElement('canvas'); // Yeni bir canvas oluştur
-            qrDownloadCanvas.width = 1500; // İndirme boyutu genişlik (1500x1500)
-            qrDownloadCanvas.height = 1500; // Yükseklik
+            qrDownloadCanvas.width = 1500; // QR kodunun genişliği (1500px)
+            qrDownloadCanvas.height = 1600; // QR kodunun yüksekliği (1600px)
 
             const ctx = qrDownloadCanvas.getContext('2d');
 
             // QR kodunu kare olarak oluştur
             const qrHighRes = new QRious({
                 value: currentUrl,
-                size: 1500, // Kare boyut, indirme için 1500x1500 px
+                size: 1500, // QR kodunun boyutu
                 background: 'black', // Zemin rengi siyah
                 foreground: 'white',  // Çizgi rengi beyaz
             });
@@ -75,9 +75,8 @@
                 ctx.font = 'bold 70px "Saira Stencil One"'; // Font boyutu
                 ctx.fillStyle = 'white'; // Yazı rengi beyaz
                 ctx.textAlign = 'center'; // Yazıyı ortaladık
-                const textYPosition = 50; // Yazıyı QR koduna daha yakın yerleştir
+                const textYPosition = 100; // Yazıyı QR koduna daha yakın yerleştir
                 ctx.fillText(fixedText, qrDownloadCanvas.width / 2, textYPosition); // Yazıyı yerleştir
-
 
                 // Yükleme göstergesini gizle
                 document.getElementById('loading').style.display = 'none';
