@@ -79,20 +79,19 @@
                 return;
             }
 
-            // Canvas'tan PNG verisini alıyoruz
-            const dataUrl = qrDownloadCanvas.toDataURL('image/png');
+            // Canvas’tan blob verisi alalım
+            qrDownloadCanvas.toBlob((blob) => {
+                // Blob verisini kullanarak dosya indirme işlemi yapalım
+                const link = document.createElement('a');
+                const fileName = generateFileName(currentUrl);
+                const objectURL = URL.createObjectURL(blob);
+                link.href = objectURL;
+                link.download = fileName + '.png'; // Dinamik dosya adı
+                link.click();
 
-            // Blob oluşturuluyor
-            fetch(dataUrl)
-                .then(res => res.blob())
-                .then(blob => {
-                    const link = document.createElement('a');
-                    const fileName = generateFileName(currentUrl);
-                    link.href = URL.createObjectURL(blob);
-                    link.download = fileName + '.png'; // Dinamik dosya adı
-                    link.click();
-                })
-                .catch(err => alert("QR kodu indirilemedi, lütfen tekrar oluşturun."));
+                // Bağlantı kullanıldıktan sonra object URL'yi serbest bırak
+                URL.revokeObjectURL(objectURL);
+            }, 'image/png');
         }
 
         function generateFileName(url) {
