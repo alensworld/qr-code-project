@@ -21,6 +21,7 @@
         let qrPreview; // Ön izleme için QR kodu
         let qrDownloadCanvas; // İndirme için QR kodu
         let currentUrl; // Kullanıcı tarafından girilen URL
+        const fixedText = "www.istekuzerine.com"; // Sabit yazı (Filigran gibi)
 
         function generateQRCode() {
             currentUrl = document.getElementById('url').value.trim();
@@ -39,7 +40,7 @@
                 foreground: 'white',  // Çizgi rengi beyaz
             });
 
-            // 2. İndirme için Yüksek Çözünürlüklü QR Kodunu Hazırla
+            // 2. QR Kodunu ve Sabit Yazıyı Yüksek Çözünürlüklü olarak oluştur
             qrDownloadCanvas = document.createElement('canvas'); // Yeni bir canvas oluştur
             qrDownloadCanvas.width = 5906; // Genişlik (50 cm)
             qrDownloadCanvas.height = 7087; // Yükseklik (60 cm)
@@ -61,6 +62,12 @@
                 const xOffset = (qrDownloadCanvas.width - 5906) / 2;
                 const yOffset = (qrDownloadCanvas.height - 5906) / 2;
                 ctx.drawImage(qrImage, xOffset, yOffset, 5906, 5906);
+
+                // QR Kodun Üstüne Sabit Yazıyı Ekle
+                ctx.font = 'bold 48px Arial'; // Yazı fontu
+                ctx.fillStyle = 'white'; // Yazı rengi
+                ctx.textAlign = 'center'; // Yazı ortalanacak
+                ctx.fillText(fixedText, qrDownloadCanvas.width / 2, 80); // Yazıyı ekle
             };
         }
 
@@ -82,9 +89,8 @@
 
         function generateFileName(url) {
             // URL'yi kısaltarak geçerli bir dosya adı yapalım
-            // URL'yi özel karakterlerden temizleyelim
             let fileName = url.replace(/[^a-zA-Z0-9]/g, '_'); // Geçerli olmayan karakterleri "_" ile değiştir
-            fileName = fileName.slice(0, 50); // Dosya adını 50 karakterle sınırlayalım (isteğe bağlı)
+            fileName = fileName.slice(0, 50); // Dosya adını 50 karakterle sınırlayalım
             return fileName;
         }
     </script>
