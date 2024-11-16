@@ -37,7 +37,7 @@
             qrPreview = new QRious({
                 element: document.getElementById('preview-canvas'),
                 value: currentUrl,
-                size: 500, // Ön izleme boyutu
+                size: 300, // Ön izleme boyutu
                 background: 'black', // Zemin rengi siyah
                 foreground: 'white',  // Çizgi rengi beyaz
             });
@@ -69,7 +69,7 @@
                 ctx.font = 'bold 384px "Saira Stencil One"'; // Font boyutu
                 ctx.fillStyle = 'white'; // Yazı rengi beyaz
                 ctx.textAlign = 'center'; // Yazıyı ortaladık
-                const textYPosition = 500; // Yazıyı QR koduna çok yakın yerleştir
+                const textYPosition = 500; // Yazıyı QR kodunun hemen üstüne yerleştir
                 ctx.fillText(fixedText, qrDownloadCanvas.width / 2, textYPosition); // Yazıyı yerleştir
             };
         }
@@ -81,13 +81,33 @@
             }
 
             // URL'yi geçerli bir dosya ismine dönüştür
-            const fileName = generateFileName(currentUrl);
+            const fileName = generateFileName(currentUrl) + '.png'; // Dosya adı ve uzantı
+
+            // PNG formatında veri URI'si oluştur
+            const dataURL = qrDownloadCanvas.toDataURL('image/png');
+
+            // Data URI'yi Blob'a çevir
+            const blob = dataURLToBlob(dataURL);
 
             // İndirme işlemi
             const link = document.createElement('a');
-            link.download = fileName + '.png'; // Dinamik dosya adı
-            link.href = qrDownloadCanvas.toDataURL('image/png'); // PNG formatında veri
+            link.href = URL.createObjectURL(blob); // Blob'u indirme bağlantısına dönüştür
+            link.download = fileName; // Dosya adını ayarla
             link.click();
+
+            // Belleği serbest bırak
+            URL.revokeObjectURL(link.href);
+        }
+
+        function dataURLToBlob(dataURL) {
+            const byteString = atob(dataURL.split(',')[1]); // Base64 çözme
+            const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0]; // MIME türü
+            const arrayBuffer = new ArrayBuffer(byteString.length);
+            const uint8Array = new Uint8Array(arrayBuffer);
+            for (let i = 0; i < byteString.length; i++) {
+                uint8Array[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([arrayBuffer], { type: mimeString });
         }
 
         function generateFileName(url) {
