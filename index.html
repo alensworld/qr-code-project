@@ -14,11 +14,12 @@
     <button onclick="generateQRCode()">QR Kodu Oluştur</button>
     <button onclick="downloadQRCode()">QR Kodunu İndir</button>
 
-    <h2>QR Kodu:</h2>
-    <canvas id="qr-code" style="border: 1px solid #000;"></canvas>
+    <h2>QR Kodu (Ön İzleme):</h2>
+    <canvas id="preview-canvas" width="500" height="500" style="border: 1px solid #000;"></canvas>
 
     <script>
-        let qr;
+        let qrPreview; // Ön izleme için QR kodu
+        let qrDownloadCanvas; // İndirme için QR kodu
 
         function generateQRCode() {
             const url = document.getElementById('url').value.trim();
@@ -28,29 +29,46 @@
                 return;
             }
 
-            // QR kodu oluştur
-            qr = new QRious({
-                element: document.getElementById('qr-code'),
+            // 1. Ön İzleme için QR Kodunu Oluştur
+            qrPreview = new QRious({
+                element: document.getElementById('preview-canvas'),
                 value: url,
-                size: 5906, // Genişlik (50 cm)
+                size: 500, // Ön izleme boyutu
             });
 
-            // Canvas boyutunu yükseklik (60 cm) için ayarla
-            const canvas = document.getElementById('qr-code');
-            canvas.width = 5906;
-            canvas.height = 7087;
+            // 2. İndirme için Yüksek Çözünürlüklü QR Kodunu Hazırla
+            qrDownloadCanvas = document.createElement('canvas'); // Yeni bir canvas oluştur
+            qrDownloadCanvas.width = 5906; // Genişlik (50 cm)
+            qrDownloadCanvas.height = 7087; // Yükseklik (60 cm)
+
+            const ctx = qrDownloadCanvas.getContext('2d');
+
+            // QR kodunu kare olarak oluştur
+            const qrHighRes = new QRious({
+                value: url,
+                size: 5906, // Kare boyut
+            });
+
+            // QR kodu yüksek çözünürlüklü canvas üzerine yerleştir
+            const qrImage = new Image();
+            qrImage.src = qrHighRes.toDataURL();
+            qrImage.onload = () => {
+                const xOffset = (qrDownloadCanvas.width - 5906) / 2;
+                const yOffset = (qrDownloadCanvas.height - 5906) / 2;
+                ctx.drawImage(qrImage, xOffset, yOffset, 5906, 5906);
+            };
         }
 
         function downloadQRCode() {
-            if (!qr) {
+            if (!qrDownloadCanvas) {
                 alert('Önce bir QR kodu oluşturun.');
                 return;
             }
 
-            // QR kodunu indir
+            // İndirme işlemi
             const link = document.createElement('a');
             link.download = 'qr-code.png';
-            link.href = document.getElementById('qr-code').toDataURL();
+            link.href = qrDownloadCanvas.toDataURL();
             link.click();
         }
     </script>
