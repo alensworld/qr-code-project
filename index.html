@@ -86,7 +86,7 @@
             // İndirme işlemi
             const link = document.createElement('a');
             link.download = fileName + '.png'; // Dinamik dosya adı
-            link.href = qrDownloadCanvas.toDataURL();
+            link.href = qrDownloadCanvas.toDataURL('image/png'); // PNG formatında veri
             link.click();
         }
 
