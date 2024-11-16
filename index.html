@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Kod Oluşturucu</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-    <!-- Google Fonts'tan Saira Stencil One fontunu ekleyin -->
     <link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -69,7 +68,7 @@
                 ctx.font = 'bold 384px "Saira Stencil One"'; // Font boyutu
                 ctx.fillStyle = 'white'; // Yazı rengi beyaz
                 ctx.textAlign = 'center'; // Yazıyı ortaladık
-                const textYPosition = 400; // Yazıyı QR kodunun hemen üstüne yerleştir
+                const textYPosition = 400; // Yazıyı QR kodunun üstüne yerleştir
                 ctx.fillText(fixedText, qrDownloadCanvas.width / 2, textYPosition); // Yazıyı yerleştir
             };
         }
@@ -80,21 +79,21 @@
                 return;
             }
 
+            // İndirme işlemi sırasında boş dosya problemi olmaması için kontrol
+            const downloadImage = qrDownloadCanvas.toDataURL('image/png');
+            if (!downloadImage) {
+                alert("QR kodu indirilemedi, lütfen tekrar oluşturun.");
+                return;
+            }
+
             // URL'yi geçerli bir dosya ismine dönüştür
             const fileName = generateFileName(currentUrl);
 
-            // QR kodu canvas üzerinden indirilmeye hazır hale geldiğinde
-            qrDownloadCanvas.toBlob((blob) => {
-                if (blob) {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = fileName + '.png'; // Dinamik dosya adı
-                    link.click();
-                    URL.revokeObjectURL(link.href); // Hafızayı temizle
-                } else {
-                    alert('QR kod oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
-                }
-            });
+            // İndirme işlemi
+            const link = document.createElement('a');
+            link.download = fileName + '.png'; // Dinamik dosya adı
+            link.href = downloadImage;
+            link.click();
         }
 
         function generateFileName(url) {
