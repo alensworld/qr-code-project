@@ -20,11 +20,12 @@
     <script>
         let qrPreview; // Ön izleme için QR kodu
         let qrDownloadCanvas; // İndirme için QR kodu
+        let currentUrl; // Kullanıcı tarafından girilen URL
 
         function generateQRCode() {
-            const url = document.getElementById('url').value.trim();
+            currentUrl = document.getElementById('url').value.trim();
 
-            if (!url) {
+            if (!currentUrl) {
                 alert('Lütfen geçerli bir URL girin.');
                 return;
             }
@@ -32,7 +33,7 @@
             // 1. Ön İzleme için QR Kodunu Oluştur
             qrPreview = new QRious({
                 element: document.getElementById('preview-canvas'),
-                value: url,
+                value: currentUrl,
                 size: 500, // Ön izleme boyutu
                 background: 'black', // Zemin rengi siyah
                 foreground: 'white',  // Çizgi rengi beyaz
@@ -47,7 +48,7 @@
 
             // QR kodunu kare olarak oluştur
             const qrHighRes = new QRious({
-                value: url,
+                value: currentUrl,
                 size: 5906, // Kare boyut
                 background: 'black', // Zemin rengi siyah
                 foreground: 'white',  // Çizgi rengi beyaz
@@ -69,11 +70,22 @@
                 return;
             }
 
+            // URL'yi geçerli bir dosya ismine dönüştür
+            const fileName = generateFileName(currentUrl);
+
             // İndirme işlemi
             const link = document.createElement('a');
-            link.download = 'qr-code.png';
+            link.download = fileName + '.png'; // Dinamik dosya adı
             link.href = qrDownloadCanvas.toDataURL();
             link.click();
+        }
+
+        function generateFileName(url) {
+            // URL'yi kısaltarak geçerli bir dosya adı yapalım
+            // URL'yi özel karakterlerden temizleyelim
+            let fileName = url.replace(/[^a-zA-Z0-9]/g, '_'); // Geçerli olmayan karakterleri "_" ile değiştir
+            fileName = fileName.slice(0, 50); // Dosya adını 50 karakterle sınırlayalım (isteğe bağlı)
+            return fileName;
         }
     </script>
 </body>
