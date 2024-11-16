@@ -72,11 +72,12 @@
                 ctx.drawImage(qrImage, xOffset, yOffset, 1500, 1500);
 
                 // QR Kodun Üstüne Sabit Yazıyı Ekle
-                ctx.font = 'bold 100px "Saira Stencil One"'; // Font boyutu
+                ctx.font = 'bold 384px "Saira Stencil One"'; // Font boyutu
                 ctx.fillStyle = 'white'; // Yazı rengi beyaz
                 ctx.textAlign = 'center'; // Yazıyı ortaladık
-                const textYPosition = 1300; // Yazıyı QR koduna çok yakın yerleştir
+                const textYPosition = 250; // Yazıyı QR koduna daha yakın yerleştir
                 ctx.fillText(fixedText, qrDownloadCanvas.width / 2, textYPosition); // Yazıyı yerleştir
+
 
                 // Yükleme göstergesini gizle
                 document.getElementById('loading').style.display = 'none';
