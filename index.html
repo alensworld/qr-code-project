@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Kod Oluşturucu</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <!-- Google Fonts'tan Saira Stencil One fontunu ekleyin -->
+    <link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&display=swap" rel="stylesheet">
 </head>
 <body>
     <h1>QR Kod Oluşturucu</h1>
@@ -64,10 +66,10 @@
                 ctx.drawImage(qrImage, xOffset, yOffset, 5906, 5906);
 
                 // QR Kodun Üstüne Sabit Yazıyı Ekle
-                ctx.font = 'bold 192px "Saira Stencil One"'; // Saira Stencil One fontu
-                ctx.fillStyle = 'white'; // Yazı rengi
-                ctx.textAlign = 'center'; // Yazı ortalanacak
-                ctx.fillText(fixedText, qrDownloadCanvas.width / 2, 80); // Yazıyı ekle
+                ctx.font = 'bold 196px "Saira Stencil One"'; // Font ve boyut
+                ctx.fillStyle = 'white'; // Yazı rengi beyaz
+                ctx.textAlign = 'center'; // Yazıyı ortaladık
+                ctx.fillText(fixedText, qrDownloadCanvas.width / 2, 300); // Yazıyı ortaladık, yukarıya yerleştirdik
             };
         }
 
