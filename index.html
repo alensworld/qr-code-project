@@ -34,6 +34,8 @@
                 element: document.getElementById('preview-canvas'),
                 value: url,
                 size: 500, // Ön izleme boyutu
+                background: 'black', // Zemin rengi siyah
+                foreground: 'white',  // Çizgi rengi beyaz
             });
 
             // 2. İndirme için Yüksek Çözünürlüklü QR Kodunu Hazırla
@@ -47,6 +49,8 @@
             const qrHighRes = new QRious({
                 value: url,
                 size: 5906, // Kare boyut
+                background: 'black', // Zemin rengi siyah
+                foreground: 'white',  // Çizgi rengi beyaz
             });
 
             // QR kodu yüksek çözünürlüklü canvas üzerine yerleştir
