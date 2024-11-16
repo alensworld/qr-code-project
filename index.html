@@ -9,25 +9,49 @@
 <body>
     <h1>QR Kod Oluşturucu</h1>
     <label for="url">QR kodu oluşturmak için URL girin:</label><br>
-    <input type="text" id="url" required><br><br>
+    <input type="text" id="url" placeholder="Örneğin: https://example.com" required><br><br>
+
     <button onclick="generateQRCode()">QR Kodu Oluştur</button>
+    <button onclick="downloadQRCode()">QR Kodunu İndir</button>
 
     <h2>QR Kodu:</h2>
-    <canvas id="qr-code"></canvas>
+    <canvas id="qr-code" style="border: 1px solid #000;"></canvas>
 
     <script>
+        let qr;
+
         function generateQRCode() {
-            const url = document.getElementById('url').value;
+            const url = document.getElementById('url').value.trim();
+
             if (!url) {
-                alert('Lütfen bir URL girin.');
+                alert('Lütfen geçerli bir URL girin.');
                 return;
             }
 
-            const qr = new QRious({
+            // QR kodu oluştur
+            qr = new QRious({
                 element: document.getElementById('qr-code'),
                 value: url,
-                size: 200,
+                size: 5906, // Genişlik (50 cm)
             });
+
+            // Canvas boyutunu yükseklik (60 cm) için ayarla
+            const canvas = document.getElementById('qr-code');
+            canvas.width = 5906;
+            canvas.height = 7087;
+        }
+
+        function downloadQRCode() {
+            if (!qr) {
+                alert('Önce bir QR kodu oluşturun.');
+                return;
+            }
+
+            // QR kodunu indir
+            const link = document.createElement('a');
+            link.download = 'qr-code.png';
+            link.href = document.getElementById('qr-code').toDataURL();
+            link.click();
         }
     </script>
 </body>
