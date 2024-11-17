@@ -5,8 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Kod Oluşturucu</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-    <!-- Google Fonts'tan Saira Stencil One fontunu ekleyin -->
     <link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&display=swap" rel="stylesheet">
+    
+    <!-- CSS Stilleri -->
+    <style>
+        body {
+            font-family: 'Saira Stencil One', sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            max-width: 400px;
+        }
+        canvas {
+            margin-top: 10px;
+        }
+        #loading {
+            color: #333;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>QR Kod Oluşturucu</h1>
@@ -71,12 +110,16 @@
                 const yOffset = 200; // QR kodunun üst kısmına boşluk bırakmak için yOffset
                 ctx.drawImage(qrImage, xOffset, yOffset, 1300, 1300);
 
-                // QR Kodun Üstüne Sabit Yazıyı Ekle
+                // QR Kodun Üstüne Sabit Yazıyı Ekle (Üst Kısım)
                 ctx.font = 'bold 63px "Saira Stencil One"'; // Font boyutu
                 ctx.fillStyle = 'white'; // Yazı rengi beyaz
                 ctx.textAlign = 'center'; // Yazıyı ortaladık
-                const textYPosition = 175; // Sabit yazıyı üst kısma yerleştir
-                ctx.fillText(fixedText, qrDownloadCanvas.width / 2, textYPosition); // Yazıyı yerleştir
+                const textYPositionTop = 175; // Sabit yazıyı üst kısma yerleştir
+                ctx.fillText(fixedText, qrDownloadCanvas.width / 2, textYPositionTop); // Yazıyı yerleştir
+
+                // QR Kodun Altına Sabit Yazıyı Ekle (Alt Kısım)
+                const textYPositionBottom = qrDownloadCanvas.height - 50; // Sabit yazıyı alt kısma yerleştir
+                ctx.fillText(fixedText, qrDownloadCanvas.width / 2, textYPositionBottom); // Yazıyı yerleştir
 
                 // Yükleme göstergesini gizle
                 document.getElementById('loading').style.display = 'none';
