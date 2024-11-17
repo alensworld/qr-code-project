@@ -6,6 +6,38 @@
     <title>QR Kod Oluşturucu</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&display=swap" rel="stylesheet">
+    
+    <!-- CSS Stili -->
+    <style>
+        body {
+            font-family: 'Saira Stencil One', sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            max-width: 400px;
+        }
+    </style>
 </head>
 <body>
     <h1>QR Kod Oluşturucu</h1>
@@ -25,7 +57,7 @@
         let qrDownloadCanvas;
         let currentUrl;
         const topFixedText = "ŞARKI İSTEMEK İÇİN QR KODU TARATIN";
-        const bottomFixedText = "www.istekuzerine.com"; // Alt yazı
+        const bottomFixedText = "www.istekuzerine.com";
 
         function generateQRCode() {
             currentUrl = document.getElementById('url').value.trim();
@@ -47,7 +79,7 @@
 
             qrDownloadCanvas = document.createElement('canvas');
             qrDownloadCanvas.width = 1500;
-            qrDownloadCanvas.height = 2000; // Yükseklik artırıldı
+            qrDownloadCanvas.height = 2000;
 
             const ctx = qrDownloadCanvas.getContext('2d');
 
@@ -65,15 +97,15 @@
                 const yOffset = 200;
                 ctx.drawImage(qrImage, xOffset, yOffset, 1300, 1300);
 
-                // Sabit üst yazı
+                // Üst Yazı
                 ctx.font = 'bold 63px "Saira Stencil One"';
                 ctx.fillStyle = 'white';
                 ctx.textAlign = 'center';
                 const topTextYPosition = 175;
                 ctx.fillText(topFixedText, qrDownloadCanvas.width / 2, topTextYPosition);
 
-                // Sabit alt yazı (QR kodun hemen altında)
-                const bottomTextYPosition = yOffset + 1300 + 150; // QR kodun altına mesafe
+                // Alt Yazı
+                const bottomTextYPosition = yOffset + 1300 + 500; // Mesafe ayarlandı
                 ctx.fillText(bottomFixedText, qrDownloadCanvas.width / 2, bottomTextYPosition);
 
                 document.getElementById('loading').style.display = 'none';
