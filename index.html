@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -6,46 +6,6 @@
     <title>QR Kod Oluşturucu</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&display=swap" rel="stylesheet">
-    
-    <!-- CSS Stilleri -->
-    <style>
-        body {
-            font-family: 'Saira Stencil One', sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        button {
-            padding: 10px 20px;
-            margin: 5px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        input {
-            padding: 10px;
-            font-size: 16px;
-            width: 80%;
-            max-width: 400px;
-        }
-        canvas {
-            margin-top: 10px;
-        }
-        #loading {
-            color: #333;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 <body>
     <h1>QR Kod Oluşturucu</h1>
@@ -58,14 +18,14 @@
     <h2>QR Kodu (Ön İzleme):</h2>
     <canvas id="preview-canvas" width="250" height="250" style="border: 1px solid #000;"></canvas>
 
-    <!-- Yükleme göstergesi -->
     <div id="loading" style="display:none;">QR Kodu Yükleniyor...</div>
 
     <script>
-        let qrPreview; // Ön izleme için QR kodu
-        let qrDownloadCanvas; // İndirme için QR kodu
-        let currentUrl; // Kullanıcı tarafından girilen URL
-        const fixedText = "ŞARKI İSTEMEK İÇİN QR KODU TARATIN"; // Sabit yazı
+        let qrPreview;
+        let qrDownloadCanvas;
+        let currentUrl;
+        const topFixedText = "ŞARKI İSTEMEK İÇİN QR KODU TARATIN";
+        const bottomFixedText = "www.istekuzerine.com"; // Alt yazı
 
         function generateQRCode() {
             currentUrl = document.getElementById('url').value.trim();
@@ -75,53 +35,47 @@
                 return;
             }
 
-            // Yükleme göstergesini başlat
             document.getElementById('loading').style.display = 'block';
 
-            // 1. Ön İzleme için QR Kodunu Oluştur
             qrPreview = new QRious({
                 element: document.getElementById('preview-canvas'),
                 value: currentUrl,
-                size: 250, // Ön izleme boyutu
-                background: 'black', // Zemin rengi siyah
-                foreground: 'white',  // Çizgi rengi beyaz
+                size: 250,
+                background: 'black',
+                foreground: 'white',
             });
 
-            // 2. QR Kodunu ve Sabit Yazıyı Yüksek Çözünürlüklü olarak oluştur
-            qrDownloadCanvas = document.createElement('canvas'); // Yeni bir canvas oluştur
-            qrDownloadCanvas.width = 1500; // İndirme boyutu genişlik (1500x1800)
-            qrDownloadCanvas.height = 1800; // Yükseklik
+            qrDownloadCanvas = document.createElement('canvas');
+            qrDownloadCanvas.width = 1500;
+            qrDownloadCanvas.height = 2000; // Yükseklik artırıldı
 
             const ctx = qrDownloadCanvas.getContext('2d');
 
-            // QR kodunu kare olarak oluştur
             const qrHighRes = new QRious({
                 value: currentUrl,
-                size: 1300, // Kare boyut, 1300px ile QR kodu
-                background: 'black', // Zemin rengi siyah
-                foreground: 'white',  // Çizgi rengi beyaz
+                size: 1300,
+                background: 'black',
+                foreground: 'white',
             });
 
-            // QR kodu yüksek çözünürlüklü canvas üzerine yerleştir
             const qrImage = new Image();
             qrImage.src = qrHighRes.toDataURL();
             qrImage.onload = () => {
                 const xOffset = (qrDownloadCanvas.width - 1300) / 2;
-                const yOffset = 200; // QR kodunun üst kısmına boşluk bırakmak için yOffset
+                const yOffset = 200;
                 ctx.drawImage(qrImage, xOffset, yOffset, 1300, 1300);
 
-                // QR Kodun Üstüne Sabit Yazıyı Ekle (Üst Kısım)
-                ctx.font = 'bold 63px "Saira Stencil One"'; // Font boyutu
-                ctx.fillStyle = 'white'; // Yazı rengi beyaz
-                ctx.textAlign = 'center'; // Yazıyı ortaladık
-                const textYPositionTop = 175; // Sabit yazıyı üst kısma yerleştir
-                ctx.fillText(fixedText, qrDownloadCanvas.width / 2, textYPositionTop); // Yazıyı yerleştir
+                // Sabit üst yazı
+                ctx.font = 'bold 63px "Saira Stencil One"';
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center';
+                const topTextYPosition = 175;
+                ctx.fillText(topFixedText, qrDownloadCanvas.width / 2, topTextYPosition);
 
-                // QR Kodun Altına Sabit Yazıyı Ekle (Alt Kısım)
-                const textYPositionBottom = qrDownloadCanvas.height - 50; // Sabit yazıyı alt kısma yerleştir
-                ctx.fillText(fixedText, qrDownloadCanvas.width / 2, textYPositionBottom); // Yazıyı yerleştir
+                // Sabit alt yazı (QR kodun hemen altında)
+                const bottomTextYPosition = yOffset + 1300 + 150; // QR kodun altına mesafe
+                ctx.fillText(bottomFixedText, qrDownloadCanvas.width / 2, bottomTextYPosition);
 
-                // Yükleme göstergesini gizle
                 document.getElementById('loading').style.display = 'none';
             };
         }
@@ -132,22 +86,19 @@
                 return;
             }
 
-            // URL'yi geçerli bir dosya ismine dönüştür
             const fileName = generateFileName(currentUrl);
 
-            // QR kodunu PNG olarak blob'a dönüştür
             qrDownloadCanvas.toBlob(function(blob) {
                 const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob); // Blob URL'sini oluştur
-                link.download = fileName + '.png'; // Dosya ismini belirle
+                link.href = URL.createObjectURL(blob);
+                link.download = fileName + '.png';
                 link.click();
             }, 'image/png');
         }
 
         function generateFileName(url) {
-            // URL'yi kısaltarak geçerli bir dosya adı yapalım
-            let fileName = url.replace(/[^a-zA-Z0-9]/g, '_'); // Geçerli olmayan karakterleri "_" ile değiştir
-            fileName = fileName.slice(0, 50); // Dosya adını 50 karakterle sınırlayalım
+            let fileName = url.replace(/[^a-zA-Z0-9]/g, '_');
+            fileName = fileName.slice(0, 50);
             return fileName;
         }
     </script>
