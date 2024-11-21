@@ -79,7 +79,7 @@
 
             qrDownloadCanvas = document.createElement('canvas');
             qrDownloadCanvas.width = 1500;
-            qrDownloadCanvas.height = 1700;  // Yüksekliği düşürdük
+            qrDownloadCanvas.height = 2000;
 
             const ctx = qrDownloadCanvas.getContext('2d');
 
@@ -97,27 +97,16 @@
                 const yOffset = 200;
                 ctx.drawImage(qrImage, xOffset, yOffset, 1300, 1300);
 
-                // Üst Yazı Arka Planı
-                const topTextBackgroundYPosition = 50;  // Üst yazı yeri
-                ctx.fillStyle = 'black';
-                ctx.fillRect(0, topTextBackgroundYPosition - 50, qrDownloadCanvas.width, 100);  // Arka plan boyutunu ayarladık
-
                 // Üst Yazı
-                ctx.fillStyle = 'white';
                 ctx.font = 'bold 63px "Saira Stencil One"';
+                ctx.fillStyle = 'white';
                 ctx.textAlign = 'center';
-                ctx.fillText(topFixedText, qrDownloadCanvas.width / 2, topTextBackgroundYPosition);
-
-                // Alt Yazı Arka Planı
-                const bottomTextBackgroundYPosition = yOffset + 1300 + 30; // Alt yazı biraz daha aşağıda
-                ctx.fillStyle = 'black';
-                ctx.fillRect(0, bottomTextBackgroundYPosition, qrDownloadCanvas.width, 100);  // Arka plan boyutunu ayarladık
+                const topTextYPosition = 175;
+                ctx.fillText(topFixedText, qrDownloadCanvas.width / 2, topTextYPosition);
 
                 // Alt Yazı
-                ctx.fillStyle = 'white';
-                ctx.font = 'bold 63px "Saira Stencil One"';
-                ctx.textAlign = 'center';
-                ctx.fillText(bottomFixedText, qrDownloadCanvas.width / 2, bottomTextBackgroundYPosition + 75);
+                const bottomTextYPosition = yOffset + 1300 + 75; // Mesafe ayarlandı
+                ctx.fillText(bottomFixedText, qrDownloadCanvas.width / 2, bottomTextYPosition);
 
                 document.getElementById('loading').style.display = 'none';
             };
