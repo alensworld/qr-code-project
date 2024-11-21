@@ -69,6 +69,7 @@
 
             document.getElementById('loading').style.display = 'block';
 
+            // 1. Ön İzleme QR Kodu oluştur
             qrPreview = new QRious({
                 element: document.getElementById('preview-canvas'),
                 value: currentUrl,
@@ -77,6 +78,7 @@
                 foreground: 'white',
             });
 
+            // 2. Yüksek çözünürlükte QR Kodu ve sabit yazıları ekle
             qrDownloadCanvas = document.createElement('canvas');
             qrDownloadCanvas.width = 1500;
             qrDownloadCanvas.height = 2000;
@@ -97,21 +99,21 @@
                 const yOffset = 200;
                 ctx.drawImage(qrImage, xOffset, yOffset, 1300, 1300);
 
-                // Üst Yazı ve Arka Plan
-                ctx.fillStyle = 'black'; // Tamamen siyah arka plan
-                ctx.fillRect(0, 0, qrDownloadCanvas.width, 200); // Üst kısmı siyah yapıyoruz
+                // Arka planı siyah yapmak için, QR kodu çevresinde bir dikdörtgen çizelim
+                ctx.fillStyle = 'black'; // Arka plan siyah
+                ctx.fillRect(0, 0, qrDownloadCanvas.width, yOffset); // Üst kısım için
+                ctx.fillRect(0, yOffset + 1300, qrDownloadCanvas.width, qrDownloadCanvas.height - (yOffset + 1300)); // Alt kısım için
 
+                // Üst Yazı
                 ctx.font = 'bold 63px "Saira Stencil One"';
-                ctx.fillStyle = 'white'; // Yazılar beyaz olacak
+                ctx.fillStyle = 'white';
                 ctx.textAlign = 'center';
                 const topTextYPosition = 175;
                 ctx.fillText(topFixedText, qrDownloadCanvas.width / 2, topTextYPosition);
 
-                // Alt Yazı ve Arka Plan
+                // Alt Yazı
                 const bottomTextYPosition = yOffset + 1300 + 75;
-                ctx.fillRect(0, bottomTextYPosition, qrDownloadCanvas.width, 200); // Alt kısmı siyah yapıyoruz
-
-                ctx.fillText(bottomFixedText, qrDownloadCanvas.width / 2, bottomTextYPosition + 100);
+                ctx.fillText(bottomFixedText, qrDownloadCanvas.width / 2, bottomTextYPosition);
 
                 document.getElementById('loading').style.display = 'none';
             };
