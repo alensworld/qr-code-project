@@ -69,7 +69,6 @@
 
             document.getElementById('loading').style.display = 'block';
 
-            // 1. Ön İzleme QR Kodu oluştur
             qrPreview = new QRious({
                 element: document.getElementById('preview-canvas'),
                 value: currentUrl,
@@ -78,10 +77,9 @@
                 foreground: 'white',
             });
 
-            // 2. Yüksek çözünürlükte QR Kodu ve sabit yazıları ekle
             qrDownloadCanvas = document.createElement('canvas');
             qrDownloadCanvas.width = 1500;
-            qrDownloadCanvas.height = 2000;
+            qrDownloadCanvas.height = 1700;  // Yüksekliği düşürdük
 
             const ctx = qrDownloadCanvas.getContext('2d');
 
@@ -99,21 +97,27 @@
                 const yOffset = 200;
                 ctx.drawImage(qrImage, xOffset, yOffset, 1300, 1300);
 
-                // Arka planı siyah yapmak için, QR kodu çevresinde bir dikdörtgen çizelim
-                ctx.fillStyle = 'black'; // Arka plan siyah
-                ctx.fillRect(0, 0, qrDownloadCanvas.width, yOffset); // Üst kısım için
-                ctx.fillRect(0, yOffset + 1300, qrDownloadCanvas.width, qrDownloadCanvas.height - (yOffset + 1300)); // Alt kısım için
+                // Üst Yazı Arka Planı
+                const topTextBackgroundYPosition = 50;  // Üst yazı yeri
+                ctx.fillStyle = 'black';
+                ctx.fillRect(0, topTextBackgroundYPosition - 50, qrDownloadCanvas.width, 100);  // Arka plan boyutunu ayarladık
 
                 // Üst Yazı
-                ctx.font = 'bold 63px "Saira Stencil One"';
                 ctx.fillStyle = 'white';
+                ctx.font = 'bold 63px "Saira Stencil One"';
                 ctx.textAlign = 'center';
-                const topTextYPosition = 175;
-                ctx.fillText(topFixedText, qrDownloadCanvas.width / 2, topTextYPosition);
+                ctx.fillText(topFixedText, qrDownloadCanvas.width / 2, topTextBackgroundYPosition);
+
+                // Alt Yazı Arka Planı
+                const bottomTextBackgroundYPosition = yOffset + 1300 + 30; // Alt yazı biraz daha aşağıda
+                ctx.fillStyle = 'black';
+                ctx.fillRect(0, bottomTextBackgroundYPosition, qrDownloadCanvas.width, 100);  // Arka plan boyutunu ayarladık
 
                 // Alt Yazı
-                const bottomTextYPosition = yOffset + 1300 + 75;
-                ctx.fillText(bottomFixedText, qrDownloadCanvas.width / 2, bottomTextYPosition);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 63px "Saira Stencil One"';
+                ctx.textAlign = 'center';
+                ctx.fillText(bottomFixedText, qrDownloadCanvas.width / 2, bottomTextBackgroundYPosition + 75);
 
                 document.getElementById('loading').style.display = 'none';
             };
