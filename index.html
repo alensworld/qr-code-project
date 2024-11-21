@@ -97,15 +97,21 @@
                 const yOffset = 200;
                 ctx.drawImage(qrImage, xOffset, yOffset, 1300, 1300);
 
-                // Üst Yazı
+                // Üst Yazı için Siyah Arka Plan
                 ctx.font = 'bold 63px "Saira Stencil One"';
                 ctx.fillStyle = 'white';
                 ctx.textAlign = 'center';
                 const topTextYPosition = 175;
+                const topTextWidth = ctx.measureText(topFixedText).width;
+                const topBackgroundHeight = 90; // Arka plan yüksekliği
+                ctx.fillRect((qrDownloadCanvas.width - topTextWidth) / 2 - 10, topTextYPosition - 40, topTextWidth + 20, topBackgroundHeight); // Siyah arka plan
+                ctx.fillStyle = 'white'; // Yazı rengi
                 ctx.fillText(topFixedText, qrDownloadCanvas.width / 2, topTextYPosition);
 
-                // Alt Yazı
-                const bottomTextYPosition = yOffset + 1300 + 75; // Mesafe ayarlandı
+                // Alt Yazı için Siyah Arka Plan
+                const bottomTextYPosition = yOffset + 1300 + 75;
+                const bottomTextWidth = ctx.measureText(bottomFixedText).width;
+                ctx.fillRect((qrDownloadCanvas.width - bottomTextWidth) / 2 - 10, bottomTextYPosition - 40, bottomTextWidth + 20, topBackgroundHeight); // Siyah arka plan
                 ctx.fillText(bottomFixedText, qrDownloadCanvas.width / 2, bottomTextYPosition);
 
                 document.getElementById('loading').style.display = 'none';
