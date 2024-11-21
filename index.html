@@ -107,15 +107,15 @@
                 ctx.textAlign = 'center';
                 ctx.fillText(topFixedText, qrDownloadCanvas.width / 2, topTextYPosition);
 
-                // Alt Yazıyı Yukarı Kaydır
-                const bottomTextYPosition = yOffset + 1300 - 75; // Alt yazıyı yukarı kaydırdım
+                // Alt Yazıyı Yukarı Kaydırdım ve Arka Planı da Aşağıya Alıyorum
+                const bottomTextYPosition = yOffset + 1300 - 75 + 100; // Burada 100px kadar aşağı kaydırdım
                 const bottomTextWidth = 1300; // QR kodunun genişliği kadar
                 ctx.fillStyle = 'black'; // Arka plan rengi siyah
                 ctx.fillRect((qrDownloadCanvas.width - bottomTextWidth) / 2, bottomTextYPosition, bottomTextWidth, 80); // Yazının arka planı
                 ctx.font = 'bold 63px "Saira Stencil One"';
                 ctx.fillStyle = 'white'; // Yazı rengi beyaz
                 ctx.textAlign = 'center';
-                ctx.fillText(bottomFixedText, qrDownloadCanvas.width / 2, bottomTextYPosition + 60);
+                ctx.fillText(bottomFixedText, qrDownloadCanvas.width / 2, bottomTextYPosition + 60); // Yazı
 
                 document.getElementById('loading').style.display = 'none';
             };
