@@ -107,8 +107,8 @@
                 ctx.textAlign = 'center';
                 ctx.fillText(topFixedText, qrDownloadCanvas.width / 2, topTextYPosition);
 
-                // Alt Yazı
-                const bottomTextYPosition = yOffset + 1300 + 75; // Mesafe ayarlandı
+                // Alt Yazıyı Yukarı Kaydır
+                const bottomTextYPosition = yOffset + 1300 - 75; // Alt yazıyı yukarı kaydırdım
                 const bottomTextWidth = 1300; // QR kodunun genişliği kadar
                 ctx.fillStyle = 'black'; // Arka plan rengi siyah
                 ctx.fillRect((qrDownloadCanvas.width - bottomTextWidth) / 2, bottomTextYPosition, bottomTextWidth, 80); // Yazının arka planı
